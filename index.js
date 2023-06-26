@@ -7,13 +7,7 @@ const schema = require('./validation_schema.js')
 
 
 try {
-  const yamlFile = core.getInput('yamlFile');
-  const parsedYaml = await yaml.load(yamlFile.toString('utf-8'));
-  console.log(parsedYaml);
-  const ajv = new Ajv();
-  const validate = ajv.compile(schema);
-  const isValid = validate(parsedYaml);
-  console.log(isValid);
+  validateYaml();
   // `who-to-greet` input defined in action metadata file
   const nameToGreet = core.getInput('who-to-greet');
   console.log(`Hello ${nameToGreet}!`);
@@ -24,4 +18,14 @@ try {
   console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
+}
+
+async function validateYaml() {
+  const yamlFile = core.getInput('yamlFile');
+  const parsedYaml = await yaml.load(yamlFile.toString('utf-8'));
+  console.log(parsedYaml);
+  const ajv = new Ajv();
+  const validate = ajv.compile(schema);
+  const isValid = validate(parsedYaml);
+  console.log(isValid);
 }
